@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npm run tsc && npx lint-staged
+
+
+# "lint-staged": {
+#    "*.{js,jsx,ts,tsx}": [
+#      "eslint --cache --fix",
+#      "prettier --write"
+#    ],
+#    "*.{css,scss}": [
+#      "stylelint --cache --fix",
+#      "prettier --write"
+#    ]
+#  },
