@@ -1,0 +1,36 @@
+name: Format Lint Test
+
+on: [push]
+
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+
+env:
+  PRIMARY_NODE_VERSION: 20
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read # to fetch code (actions/checkout)
+
+jobs:
+  lint_without_build:
+    name: Lint without build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lint-task: ['test', 'lint', 'format']
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.PRIMARY_NODE_VERSION }}
+      - name: install NPM
+        run: npm install
+      - name: Run Check
+        run: npm run ${{ matrix.lint-task }}
