@@ -1,10 +1,10 @@
-name: Format Lint Test
+name: Integrations
 
 on: [push]
 
 concurrency:
   group: '${{ github.workflow }} - ${{ github.head_ref || github.ref }}'
-  cancel-in-progress: ${{ github.ref != 'refs/heads/master' }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 env:
   PRIMARY_NODE_VERSION: 20
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lint-task: ['test', 'lint', 'format']
+        lint-task: ['test', 'lint', 'build:types']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,3 +34,5 @@ jobs:
         run: npm install
       - name: Run Check
         run: npm run ${{ matrix.lint-task }}
+
+
