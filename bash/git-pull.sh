@@ -1,12 +1,10 @@
 #!/bin/bash
+# brew install parallel
 
 SEARCH_DIR="."
 
-for dir in "$SEARCH_DIR"/*/; do
-    # Check if it's a directory
-    if [ -d "$dir" ]; then
-        echo "Pulling updates in directory: $dir"
-        # Navigate into the directory and execute git pull
-        (cd "$dir" && git pull)
-    fi
-done
+find "$SEARCH_DIR" -mindepth 1 -maxdepth 1 -type d | \
+parallel -j 13 '
+    echo "Pulling updates in directory: {}" && \
+    (cd {} && git pull)
+'
